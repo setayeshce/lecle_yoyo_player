@@ -7,6 +7,11 @@ class VideoStyle {
   /// Custom play icon for play button.
   final Widget? playIcon;
 
+  final Widget? rePlayIcon;
+
+  final VoidCallback? onHelperSpeed;
+
+  final VoidCallback? onHelperRePlay;
   /// Custom pause icon for play button.
   final Widget? pauseIcon;
 
@@ -158,11 +163,14 @@ class VideoStyle {
   /// Constructor
   const VideoStyle({
     this.playIcon,
+    this.rePlayIcon,
     this.pauseIcon,
     this.speedIcon,
     this.volumeIcon,
     this.fullscreenIcon,
     this.forwardIcon,
+    this.onHelperSpeed,
+    this.onHelperRePlay,
     this.backwardIcon,
     this.qualityStyle = const TextStyle(color: Colors.white),
     this.qualityOptionStyle = const TextStyle(color: Colors.white),

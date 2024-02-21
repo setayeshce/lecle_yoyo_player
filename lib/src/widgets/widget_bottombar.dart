@@ -115,7 +115,7 @@ class _PlayerBottomBarState extends State<PlayerBottomBar> {
                             Container(
                               margin: const EdgeInsets.only(bottom: 16.0),
                               child: InkWell(
-                                onTap: widget.onPlaySpeedTap,
+                                onTap:widget.videoStyle.onHelperSpeed ??  widget.onPlaySpeedTap,
                                 child: widget.videoStyle.speedIcon ??
                                     Icon(
                                       Icons.fast_rewind_rounded,
@@ -149,14 +149,19 @@ class _PlayerBottomBarState extends State<PlayerBottomBar> {
                               Container(
                                 margin: EdgeInsets.only(right: widget.videoStyle.spaceBetweenBottomBarButtons, left: widget.videoStyle.spaceBetweenBottomBarButtons, bottom: 8.0),
                                 child: InkWell(
-                                  onTap: widget.onPlayButtonTap,
+                                  onTap:(widget.controller.value.position >=
+                                      widget.controller.value.duration) && (widget.videoStyle.onHelperRePlay!= null ) ? widget.videoStyle.onHelperRePlay :  widget.onPlayButtonTap,
                                   child: () {
                                     var defaultIcon = Icon(
                                       widget.controller.value.isPlaying ? Icons.pause_circle_outline : Icons.play_circle_outline,
                                       color: widget.videoStyle.playButtonIconColor ?? Colors.white,
                                       size: widget.videoStyle.playButtonIconSize ?? 35,
                                     );
+                                      if(widget.controller.value.position >=
+                                          widget.controller.value.duration){
+                                        return widget.controller.value.isPlaying ? widget.videoStyle.pauseIcon : widget.videoStyle.rePlayIcon;
 
+                                      }else
                                     if (widget.videoStyle.playIcon != null && widget.videoStyle.pauseIcon == null) {
                                       return widget.controller.value.isPlaying ? defaultIcon : widget.videoStyle.playIcon;
                                     } else if (widget.videoStyle.pauseIcon != null && widget.videoStyle.playIcon == null) {

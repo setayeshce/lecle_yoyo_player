@@ -360,7 +360,8 @@ class _YoYoPlayerState extends State<YoYoPlayer> with SingleTickerProviderStateM
                     ],
                   ),
                 ),
-                ...videoBuiltInChildren(),
+                bottomBar(),
+                // ...videoBuiltInChildren(),
               ],
             )
           : VideoLoading(loadingStyle: widget.videoLoadingStyle),
@@ -370,7 +371,7 @@ class _YoYoPlayerState extends State<YoYoPlayer> with SingleTickerProviderStateM
   List<Widget> videoBuiltInChildren() {
     return [
       actionBar(),
-      liveDirectButton(),
+      // liveDirectButton(),
       bottomBar(),
       // m3u8List(),
     ];
@@ -432,7 +433,8 @@ class _YoYoPlayerState extends State<YoYoPlayer> with SingleTickerProviderStateM
   /// Video player BottomBar
   Widget bottomBar() {
     return Visibility(
-      visible: showMenu,
+      visible:true,
+      // showMenu,
       child: Align(
         alignment: Alignment.bottomCenter,
         child: PlayerBottomBar(
@@ -440,7 +442,8 @@ class _YoYoPlayerState extends State<YoYoPlayer> with SingleTickerProviderStateM
           videoSeek: videoSeek ?? '00:00:00',
           videoDuration: videoDuration ?? '00:00:00',
           videoStyle: widget.videoStyle,
-          showBottomBar: showMenu,
+          showBottomBar: true,
+          // showMenu,
           onPlayButtonTap: () => togglePlay(),
           onPlaySpeedTap: () => changePlaybackSpeed(),
           onPlayVolumeTap: () => toggleVolumeOverlay(),

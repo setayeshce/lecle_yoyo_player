@@ -5,15 +5,13 @@ import 'package:video_player/video_player.dart';
 /// Video player custom style model
 class VideoStyle {
   /// Custom play icon for play button.
-  final Widget? playIcon;
-
+  final Widget? pauseIcon;
   final Widget? rePlayIcon;
+  final Widget? playIcon;
 
   final VoidCallback? onHelperSpeed;
 
   final VoidCallback? onHelperRePlay;
-  /// Custom pause icon for play button.
-  final Widget? pauseIcon;
 
   final Widget? speedIcon;
 

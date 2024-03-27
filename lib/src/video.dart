@@ -433,7 +433,7 @@ class _YoYoPlayerState extends State<YoYoPlayer> with SingleTickerProviderStateM
   /// Video player BottomBar
   Widget bottomBar() {
     return Visibility(
-      visible:true,
+      visible: true,
       // showMenu,
       child: Align(
         alignment: Alignment.bottomCenter,
@@ -444,6 +444,7 @@ class _YoYoPlayerState extends State<YoYoPlayer> with SingleTickerProviderStateM
           videoStyle: widget.videoStyle,
           showBottomBar: true,
           // showMenu,
+          rePlayVideo: () => replayVideo(),
           onPlayButtonTap: () => togglePlay(),
           onPlaySpeedTap: () => changePlaybackSpeed(),
           onPlayVolumeTap: () => toggleVolumeOverlay(),
@@ -535,6 +536,10 @@ class _YoYoPlayerState extends State<YoYoPlayer> with SingleTickerProviderStateM
     setState(() {
       _isVolumeOverlayVisible = !_isVolumeOverlayVisible;
     });
+  }
+
+  void replayVideo() {
+    controller.seekTo(Duration.zero).then((_) => controller.play());
   }
 
   bool _isVolumeOverlayVisible = false;

@@ -13,6 +13,7 @@ class PlayerBottomBar extends StatefulWidget {
     required this.controller,
     required this.showBottomBar,
     this.onPlayButtonTap,
+    this.rePlayVideo,
     this.onPlaySpeedTap,
     this.onPlayVolumeTap,
     this.videoDuration = "00:00:00",
@@ -37,6 +38,8 @@ class PlayerBottomBar extends StatefulWidget {
 
   /// The callback function execute when user tapped the play button.
   final void Function()? onPlayButtonTap;
+
+  final void Function()? rePlayVideo;
 
   final void Function()? onPlaySpeedTap;
 
@@ -115,7 +118,7 @@ class _PlayerBottomBarState extends State<PlayerBottomBar> {
                             Container(
                               margin: const EdgeInsets.only(bottom: 16.0),
                               child: InkWell(
-                                onTap:widget.videoStyle.onHelperSpeed ??  widget.onPlaySpeedTap,
+                                onTap: widget.videoStyle.onHelperSpeed ?? widget.onPlaySpeedTap,
                                 child: widget.videoStyle.speedIcon ??
                                     Icon(
                                       Icons.fast_rewind_rounded,
@@ -149,29 +152,24 @@ class _PlayerBottomBarState extends State<PlayerBottomBar> {
                               Container(
                                 margin: EdgeInsets.only(right: widget.videoStyle.spaceBetweenBottomBarButtons, left: widget.videoStyle.spaceBetweenBottomBarButtons, bottom: 8.0),
                                 child: InkWell(
-                                  onTap:(widget.controller.value.position >=
-                                      widget.controller.value.duration) && (widget.videoStyle.onHelperRePlay!= null ) ? widget.videoStyle.onHelperRePlay :  widget.onPlayButtonTap,
-                                  child: () {
-                                    var defaultIcon = Icon(
-                                      widget.controller.value.isPlaying ? Icons.pause_circle_outline : Icons.play_circle_outline,
-                                      color: widget.videoStyle.playButtonIconColor ?? Colors.white,
-                                      size: widget.videoStyle.playButtonIconSize ?? 35,
-                                    );
-                                      if(widget.controller.value.position >=
-                                          widget.controller.value.duration){
-                                        return widget.controller.value.isPlaying ? widget.videoStyle.pauseIcon : widget.videoStyle.rePlayIcon;
-
-                                      }else
-                                    if (widget.videoStyle.playIcon != null && widget.videoStyle.pauseIcon == null) {
-                                      return widget.controller.value.isPlaying ? defaultIcon : widget.videoStyle.playIcon;
-                                    } else if (widget.videoStyle.pauseIcon != null && widget.videoStyle.playIcon == null) {
-                                      return widget.controller.value.isPlaying ? widget.videoStyle.pauseIcon : defaultIcon;
-                                    } else if (widget.videoStyle.playIcon != null && widget.videoStyle.pauseIcon != null) {
-                                      return widget.controller.value.isPlaying ? widget.videoStyle.pauseIcon : widget.videoStyle.playIcon;
+                                  onTap: () {
+                                    bool videoEnded = widget.controller.value.position >= widget.controller.value.duration;
+                                    if (videoEnded && widget.videoStyle.onHelperRePlay != null) {
+                                      // If the video has ended and a replay callback is provided, call it
+                                      widget.videoStyle.onHelperRePlay!();
+                                      widget.rePlayVideo!();
+                                    } else {
+                                      // If the video is still playing or hasn't ended, toggle play/pause
+                                      if (widget.onPlayButtonTap != null) {
+                                        widget.onPlayButtonTap!();
+                                      }
                                     }
-
-                                    return defaultIcon;
-                                  }(),
+                                  },
+                                  child: widget.controller.value.isPlaying
+                                      ? widget.videoStyle.pauseIcon ?? Icon(Icons.pause_circle_outline)
+                                      : widget.controller.value.position >= widget.controller.value.duration
+                                          ? widget.videoStyle.rePlayIcon ?? Icon(Icons.replay)
+                                          : widget.videoStyle.playIcon ?? Icon(Icons.play_circle_outline),
                                 ),
                               ),
                               InkWell(
@@ -199,11 +197,12 @@ class _PlayerBottomBarState extends State<PlayerBottomBar> {
                               },
                               child: Container(
                                 margin: const EdgeInsets.only(bottom: 16.0),
-                                child: widget.videoStyle.volumeIcon ?? Icon(
-                                  Icons.volume_up,
-                                  color: widget.videoStyle.forwardIconColor,
-                                  size: widget.videoStyle.forwardAndBackwardBtSize,
-                                ),
+                                child: widget.videoStyle.volumeIcon ??
+                                    Icon(
+                                      Icons.volume_up,
+                                      color: widget.videoStyle.forwardIconColor,
+                                      size: widget.videoStyle.forwardAndBackwardBtSize,
+                                    ),
                               ),
                             ),
                             // Container(
